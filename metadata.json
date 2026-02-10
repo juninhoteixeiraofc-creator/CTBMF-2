@@ -1,0 +1,13 @@
+{
+  "name": "CTBMF - Instituto Andreoni",
+  "description": "Plataforma oficial da especialização de Cirurgia e Traumatologia Bucomaxilofacial - Instituto Andreoni.",
+  "short_name": "CTBMF Andreoni",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e40af",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
