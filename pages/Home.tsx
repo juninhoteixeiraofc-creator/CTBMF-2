@@ -1,20 +1,25 @@
 
 import React from 'react';
-import { mockPosts } from '../services/mockData';
+import { mockPosts, mockTurmas } from '../services/mockData';
 import { AppUser } from '../types';
-import { Bell, ChevronRight, Clock } from 'lucide-react';
+import { Bell, ChevronRight, Clock, GraduationCap } from 'lucide-react';
 
 interface HomeProps {
   user: AppUser;
 }
 
 const Home: React.FC<HomeProps> = ({ user }) => {
+  const userTurma = mockTurmas.find(t => t.id === user.turma_id)?.name || 'Especialização Geral';
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-black text-brand-dark">Olá, Dr. {user.displayName.split(' ')[0]}</h2>
-          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Residência • {user.turma_id === 'general' ? 'Geral' : user.turma_id}</p>
+          <div className="flex items-center space-x-1 mt-1">
+             <GraduationCap size={12} className="text-brand-gold" />
+             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{userTurma}</p>
+          </div>
         </div>
         <div className="bg-brand-dark p-2 rounded-xl relative shadow-lg">
           <Bell size={20} className="text-brand-gold" />
@@ -60,7 +65,6 @@ const Home: React.FC<HomeProps> = ({ user }) => {
           <h3 className="font-bold text-xl mb-1 leading-tight">Traumatologia<br/>Bucomaxilo Avançada</h3>
           <p className="text-gray-400 text-xs mt-2 font-medium">Início confirmado: 15 de Outubro</p>
         </div>
-        {/* Abstract background shape */}
         <div className="absolute bottom-[-20%] right-[-10%] w-40 h-40 gold-gradient opacity-10 rounded-full blur-3xl"></div>
       </div>
     </div>

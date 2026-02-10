@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { AppUser } from '../types';
+import { mockTurmas } from '../services/mockData';
 import { LogOut, Settings, Award, Shield, Mail, GraduationCap } from 'lucide-react';
 
 interface ProfileProps {
@@ -9,6 +10,8 @@ interface ProfileProps {
 }
 
 const Profile: React.FC<ProfileProps> = ({ user, onLogout }) => {
+  const userTurma = mockTurmas.find(t => t.id === user.turma_id)?.name || 'Acesso Administrativo';
+
   return (
     <div className="space-y-10 animate-fade-in pb-10">
       <div className="flex flex-col items-center text-center">
@@ -16,7 +19,6 @@ const Profile: React.FC<ProfileProps> = ({ user, onLogout }) => {
           <div className="w-28 h-28 rounded-[2rem] overflow-hidden border-4 border-white shadow-2xl relative z-10">
             <img src={user.photoURL} alt={user.displayName} className="w-full h-full object-cover" />
           </div>
-          {/* Decorative halo */}
           <div className="absolute inset-0 bg-brand-gold/20 blur-2xl rounded-full translate-y-4 scale-110"></div>
           <div className="absolute -bottom-2 -right-2 bg-brand-dark text-brand-gold p-2 rounded-2xl border-4 border-white z-20 shadow-lg">
             {user.role === 'admin' ? <Shield size={18} /> : <Award size={18} />}
@@ -44,8 +46,8 @@ const Profile: React.FC<ProfileProps> = ({ user, onLogout }) => {
             <div className="flex items-center space-x-4">
               <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 group-hover:text-brand-gold transition-colors"><GraduationCap size={20} /></div>
               <div className="flex flex-col">
-                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Turma Atual</span>
-                 <span className="text-sm font-bold text-brand-dark">{user.turma_id === 'general' ? 'Geral (Todos)' : user.turma_id}</span>
+                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Nível de Residência</span>
+                 <span className="text-sm font-bold text-brand-dark">{userTurma}</span>
               </div>
             </div>
           </div>

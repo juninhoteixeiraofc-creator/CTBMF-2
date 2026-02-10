@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Plus, Trash2, Edit3, Send, CheckCircle2, LayoutGrid, FilePlus } from 'lucide-react';
 import { ItemType } from '../types';
+import { mockTurmas } from '../services/mockData';
 
 const Admin: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'posts' | 'materials'>('posts');
@@ -77,8 +78,9 @@ const Admin: React.FC = () => {
               <div className="relative">
                 <select className="w-full bg-gray-50 border border-gray-100 rounded-xl p-4 text-sm font-medium outline-none focus:ring-2 focus:ring-brand-gold/30 appearance-none">
                   <option>Todas as Turmas (Padrão)</option>
-                  <option>Turma 2026/1</option>
-                  <option>Turma 2026/2</option>
+                  {mockTurmas.map(t => (
+                    <option key={t.id} value={t.id}>{t.name}</option>
+                  ))}
                 </select>
                 <LayoutGrid className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none" size={16} />
               </div>
@@ -120,6 +122,16 @@ const Admin: React.FC = () => {
                   <option value={ItemType.PROTOCOL}>PDF / PROTOCOLO</option>
                 </select>
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Público Alvo</label>
+              <select className="w-full bg-gray-50 border border-gray-100 rounded-xl p-4 text-sm font-medium appearance-none">
+                <option value="all">Geral (Todos)</option>
+                {mockTurmas.map(t => (
+                  <option key={t.id} value={t.id}>{t.name}</option>
+                ))}
+              </select>
             </div>
 
             <div className="space-y-2">

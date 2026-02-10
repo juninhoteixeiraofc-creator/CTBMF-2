@@ -1,5 +1,11 @@
 
-import { Post, Module, MaterialItem, ItemType, AppUser } from '../types';
+import { Post, Module, MaterialItem, ItemType, AppUser, Turma } from '../types';
+
+export const mockTurmas: Turma[] = [
+  { id: 'r1-2026', name: 'R1- Turma 2026' },
+  { id: 'r2-2025', name: 'R2- Turma 2025' },
+  { id: 'r3-2024', name: 'R3- Turma 2024' },
+];
 
 export const mockUser: AppUser = {
   uid: 'admin123',
@@ -48,7 +54,6 @@ export const mockItems: MaterialItem[] = [
     type: ItemType.PROTOCOL,
     link: 'https://docs.google.com/viewer?url=https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
   },
-  // Cirurgias com nomes corrigidos conforme o YouTube
   {
     id: 'v1',
     moduleId: 'mod3',
