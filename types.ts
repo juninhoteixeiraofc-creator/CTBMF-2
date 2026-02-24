@@ -8,6 +8,7 @@ export interface AppUser {
   photoURL: string;
   role: UserRole;
   turma_id: string;
+  approved: boolean; // New field for approval workflow
 }
 
 export interface Post {

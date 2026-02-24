@@ -13,8 +13,44 @@ export const mockUser: AppUser = {
   displayName: 'Dr. Andreoni',
   photoURL: 'https://picsum.photos/100/100',
   role: 'admin',
-  turma_id: 'general'
+  turma_id: 'general',
+  approved: true
 };
+
+// Usuários Pendentes
+export const mockPendingUsers: AppUser[] = [
+  {
+    uid: 'u-pending-1',
+    email: 'residente.teste@email.com',
+    displayName: 'Dr. Ricardo Silva',
+    photoURL: 'https://ui-avatars.com/api/?name=Ricardo+Silva&background=c89b3c&color=fff',
+    role: 'student',
+    turma_id: 'r1-2026',
+    approved: false
+  },
+  {
+    uid: 'u-pending-2',
+    email: 'marcos.bmf@email.com',
+    displayName: 'Dr. Marcos Oliveira',
+    photoURL: 'https://ui-avatars.com/api/?name=Marcos+Oliveira&background=c89b3c&color=fff',
+    role: 'student',
+    turma_id: 'r2-2025',
+    approved: false
+  }
+];
+
+// Usuários já Aprovados/Ativos
+export const mockActiveUsers: AppUser[] = [
+  {
+    uid: 'u-active-1',
+    email: 'ana.costa@email.com',
+    displayName: 'Dra. Ana Costa',
+    photoURL: 'https://ui-avatars.com/api/?name=Ana+Costa&background=343a40&color=fff',
+    role: 'student',
+    turma_id: 'r3-2024',
+    approved: true
+  }
+];
 
 export const mockPosts: Post[] = [
   {
