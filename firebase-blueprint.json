@@ -1,0 +1,252 @@
+{
+  "entities": {
+    "SurgicalPlan": {
+      "title": "Surgical Plan",
+      "description": "A standardized surgical plan created by a resident.",
+      "type": "object",
+      "properties": {
+        "residentId": { "type": "string", "description": "UID of the resident who created the plan." },
+        "residentName": { "type": "string", "description": "Name of the resident." },
+        "residentLevel": { "type": "string", "description": "Residency level (R1, R2, R3, R4)." },
+        "surgeryDate": { "type": "string", "format": "date-time", "description": "Scheduled date and time of the surgery." },
+        "hospitalUnit": { "type": "string", "description": "Hospital where the surgery will take place." },
+        "professorName": { "type": "string", "description": "Name of the supervising professor." },
+        "patientCode": { "type": "string", "description": "Patient identifier (initials or code)." },
+        "procedureName": { "type": "string", "description": "Name of the surgical procedure." },
+        "diagnosis": { "type": "string", "description": "Patient's diagnosis." },
+        "anatomyRegion": { "type": "string", "description": "Anatomical region of the surgery." },
+        "affectedSide": { "type": "string", "description": "Affected side (Right, Left, Bilateral, N/A)." },
+        "caseType": { "type": "string", "description": "Case type (Elective, Urgent, Emergency)." },
+        "caseSummary": { "type": "string", "description": "Brief summary of the case." },
+        "indication": { "type": "string", "description": "Surgical indication." },
+        "anesthesia": { "type": "string", "description": "Type of anesthesia." },
+        "intubation": { "type": "string", "description": "Intubation route." },
+        "positioning": { "type": "string", "description": "Patient positioning." },
+        "antisepsis": { "type": "string", "description": "Antisepsis protocol." },
+        "surgicalAccess": { "type": "string", "description": "Surgical access route." },
+        "surgicalSteps": { "type": "string", "description": "Step-by-step surgical sequence." },
+        "fixationMaterials": { "type": "string", "description": "Materials for fixation/synthesis." },
+        "criticalStructures": { "type": "string", "description": "Critical anatomical structures to watch." },
+        "complications": { "type": "string", "description": "Potential complications." },
+        "postOpCare": { "type": "string", "description": "Post-operative care instructions." },
+        "additionalNotes": { "type": "string", "description": "Any additional observations." },
+        "auxiliaryTeam": { "type": "string", "description": "Names of the auxiliary team members." },
+        "status": { "type": "string", "enum": ["draft", "submitted", "reviewed", "approved"], "description": "Current status of the plan." },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "submittedAt": { "type": "string", "format": "date-time" },
+        "pdfUrl": { "type": "string", "description": "URL of the generated PDF in storage." },
+        "attachments": { "type": "array", "items": { "type": "string" }, "description": "List of URLs for attached files." },
+        "reviewedBy": { "type": "string", "description": "UID of the admin who reviewed the plan." },
+        "reviewNotes": { "type": "string", "description": "Notes from the administrative review." }
+      },
+      "required": ["residentId", "surgeryDate", "hospitalUnit", "professorName", "patientCode", "procedureName", "status"]
+    },
+    "ResidentRegistry": {
+      "title": "Resident Registry",
+      "description": "Registry of all residents (R1, R2, R3).",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "role": { "type": "string", "enum": ["R1", "R2", "R3"] },
+        "active": { "type": "boolean" },
+        "userId": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "required": ["name", "role", "active"]
+    },
+    "FixedTeam": {
+      "title": "Fixed Team",
+      "description": "Fixed team composition of R2 and R1 residents.",
+      "type": "object",
+      "properties": {
+        "teamName": { "type": "string" },
+        "r2Members": { "type": "array", "items": { "type": "string" } },
+        "r1Members": { "type": "array", "items": { "type": "string" } },
+        "extraMembers": { "type": "array", "items": { "type": "string" } },
+        "active": { "type": "boolean" },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["teamName", "r2Members", "r1Members", "active"]
+    },
+    "TeamShift": {
+      "title": "Team Shift",
+      "description": "Duty shift assigned to a fixed team.",
+      "type": "object",
+      "properties": {
+        "teamId": { "type": "string" },
+        "teamName": { "type": "string" },
+        "startDate": { "type": "string" },
+        "endDate": { "type": "string" },
+        "active": { "type": "boolean" },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["teamId", "startDate", "endDate", "active"]
+    },
+    "R3Shift": {
+      "title": "R3 Shift",
+      "description": "Duty shift assigned to an R3 resident.",
+      "type": "object",
+      "properties": {
+        "residentId": { "type": "string" },
+        "residentName": { "type": "string" },
+        "teamId": { "type": "string" },
+        "teamName": { "type": "string" },
+        "startDate": { "type": "string" },
+        "endDate": { "type": "string" },
+        "active": { "type": "boolean" },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["residentId", "startDate", "endDate", "active"]
+    },
+    "DutyTeam": {
+      "title": "Duty Team",
+      "description": "A team of residents assigned to a specific week of duty.",
+      "type": "object",
+      "properties": {
+        "teamName": { "type": "string" },
+        "weekLabel": { "type": "string" },
+        "startDate": { "type": "string", "format": "date-time" },
+        "endDate": { "type": "string", "format": "date-time" },
+        "r3": { "type": "string" },
+        "r2Members": { "type": "array", "items": { "type": "string" } },
+        "r1Members": { "type": "array", "items": { "type": "string" } },
+        "allMembers": { "type": "array", "items": { "type": "string" } },
+        "notes": { "type": "string" },
+        "active": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["teamName", "weekLabel", "startDate", "endDate", "r3", "active"]
+    },
+    "AcademyLive": {
+      "title": "Academy Live",
+      "description": "Academy live session or monthly pre-recorded lesson.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "videoUrl": { "type": "string" },
+        "embedUrl": { "type": "string" },
+        "thumbnailUrl": { "type": "string" },
+        "platform": { "type": "string", "enum": ["youtube", "vimeo", "other"] },
+        "status": { "type": "string", "enum": ["scheduled", "live", "ended"] },
+        "date": { "type": "string" },
+        "time": { "type": "string" },
+        "isLesson": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "videoUrl", "status", "date", "time", "isLesson"]
+    },
+    "AcademyLibraryItem": {
+      "title": "Academy Library Item",
+      "description": "Selected books, PDFs, and guideline materials for the Academy.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string", "enum": ["trauma", "ortognatica", "estetica", "atm", "outros"] },
+        "type": { "type": "string", "enum": ["pdf", "video", "book", "protocol"] },
+        "link": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "category", "type", "link"]
+    },
+    "AcademyEvent": {
+      "title": "Academy Event",
+      "description": "Scheduled classes and live broadcasts for the Academy calendar.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "date": { "type": "string" },
+        "time": { "type": "string" },
+        "link": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "date", "time"]
+    },
+    "AcademyAnnouncement": {
+      "title": "Academy Announcement",
+      "description": "Announcements and news targeted for Academy students.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "date": { "type": "string" },
+        "authorName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "content", "authorName"]
+    },
+    "AcademyObservationalRequest": {
+      "title": "Academy Observational Request",
+      "description": "On-site clinical/observational experience request from Experience plan members.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "userPhone": { "type": "string" },
+        "requestedDate": { "type": "string" },
+        "justification": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "adminNotes": { "type": "string" },
+        "scheduledDateTime": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "userName", "userEmail", "requestedDate", "justification", "status"]
+    }
+  },
+  "firestore": {
+    "academy_lives/{liveId}": {
+      "schema": "AcademyLive",
+      "description": "Collection of Academy live sessions and lessons."
+    },
+    "academy_library/{itemId}": {
+      "schema": "AcademyLibraryItem",
+      "description": "Collection of Academy library materials."
+    },
+    "academy_events/{eventId}": {
+      "schema": "AcademyEvent",
+      "description": "Academy program schedule calendar."
+    },
+    "academy_announcements/{annId}": {
+      "schema": "AcademyAnnouncement",
+      "description": "Academy-targeted announcements."
+    },
+    "academy_observational_requests/{requestId}": {
+      "schema": "AcademyObservationalRequest",
+      "description": "Observational visit schedule requests."
+    },
+    "surgical_plans/{planId}": {
+      "schema": "SurgicalPlan",
+      "description": "Collection of surgical plans."
+    },
+    "duty_teams/{teamId}": {
+      "schema": "DutyTeam",
+      "description": "Collection of duty teams generated from scales."
+    },
+    "residents_registry/{residentId}": {
+      "schema": "ResidentRegistry",
+      "description": "Registry of residents."
+    },
+    "fixed_teams/{teamId}": {
+      "schema": "FixedTeam",
+      "description": "Fixed team compositions."
+    },
+    "team_shifts/{shiftId}": {
+      "schema": "TeamShift",
+      "description": "Shifts assigned to teams."
+    },
+    "r3_shifts/{shiftId}": {
+      "schema": "R3Shift",
+      "description": "Shifts assigned to R3s."
+    }
+  }
+}

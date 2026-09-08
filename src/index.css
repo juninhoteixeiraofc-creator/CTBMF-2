@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Prevent elastic scrolling in iOS */
+body {
+  overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.safe-top { padding-top: env(safe-area-inset-top); }
+.safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+
+.gold-gradient {
+  background: linear-gradient(135deg, #c89b3c 0%, #ead07d 50%, #c89b3c 100%);
+}
+
+.gold-text-gradient {
+  background: linear-gradient(135deg, #c89b3c 0%, #ead07d 50%, #c89b3c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Quill Editor Styles */
+.ql-editor {
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.ql-container.ql-snow {
+  border: none !important;
+}
+
+.ql-toolbar.ql-snow {
+  border: none !important;
+  border-bottom: 1px solid #f3f4f6 !important;
+  background: #f9fafb;
+}
+
+.prose .ql-editor p {
+  margin-bottom: 1em;
+}
+
+/* Quill Alignment Classes */
+.ql-align-center {
+  text-align: center;
+}
+.ql-align-right {
+  text-align: right;
+}
+.ql-align-justify {
+  text-align: justify;
+}
+
+/* Font Sizes */
+.ql-size-small {
+  font-size: 0.75em;
+}
+.ql-size-large {
+  font-size: 1.5em;
+}
+.ql-size-huge {
+  font-size: 2.5em;
+}
+
+/* Ensure pasted content doesn't overflow */
+.ql-editor img {
+  max-width: 100%;
+  height: auto;
+}
+
+.ql-editor pre {
+  background-color: #23241f;
+  color: #f8f8f2;
+  overflow: visible;
+  white-space: pre-wrap;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding: 5px 10px;
+  border-radius: 3px;
+}

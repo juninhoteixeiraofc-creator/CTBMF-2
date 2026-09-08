@@ -1,0 +1,26 @@
+{
+  "name": "Instituto Andreoni - CTBMF",
+  "short_name": "Andreoni CTBMF",
+  "description": "Plataforma de ensino e protocolos para especialização em CTBMF",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "fullscreen", "minimal-ui"],
+  "background_color": "#24282b",
+  "theme_color": "#c89b3c",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://lh3.googleusercontent.com/d/1YRNr9wiQMq0uazkWk3KY8ERoabtlTW5O",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://lh3.googleusercontent.com/d/1YRNr9wiQMq0uazkWk3KY8ERoabtlTW5O",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

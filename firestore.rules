@@ -1,0 +1,108 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Helper Functions (Simplificadas e Estáveis)
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.email in ["juninhoteixeiraofc@gmail.com", "marcomaxilofacial@gmail.com", "janioteixeiracd@gmail.com"] ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'coordinator'])
+      );
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // ===============================================================
+    // Coleções Revertidas para Versão Estável
+    // ===============================================================
+
+    // Usuários: Leitura permitida para autenticados (evita quebra no carregamento do app)
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId) || isAdmin();
+    }
+
+    // Solicitações de Acesso
+    match /access_requests/{requestId} {
+      allow create: if isAuthenticated();
+      allow read: if isAdmin() || (isAuthenticated() && (request.auth.uid == resource.data.uid || request.auth.token.email == resource.data.email));
+      allow update, delete: if isAdmin();
+    }
+
+    // ===============================================================
+    // CORREÇÃO ISOLADA: Planejamentos Cirúrgicos
+    // ===============================================================
+    match /surgical_plans/{planId} {
+      allow create: if isAuthenticated();
+      // Permite ler se for o dono, admin ou se for um planejamento aprovado (Biblioteca)
+      allow read: if isAdmin() || (isAuthenticated() && (
+        resource == null || 
+        resource.data.residentId == request.auth.uid ||
+        resource.data.status == 'approved'
+      ));
+      // Permite atualizar (anexar arquivos/mudar status) se for o dono ou admin
+      allow update: if isAdmin() || (isAuthenticated() && resource.data.residentId == request.auth.uid);
+      allow delete: if isAdmin();
+    }
+
+    // ===============================================================
+    // Coleções Educacionais (Revertidas para Leitura Geral Autenticada)
+    // ===============================================================
+    match /surgeries/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /protocols/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /announcements/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /notifications/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /lives/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /home_highlights/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /modules/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /materials/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /knowledge_base/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /knowledge_base_ctbmf/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /chefinho_knowledge/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    
+    // Interações e Histórico
+    match /notification_reads/{id} { allow read, write: if isAuthenticated(); }
+    match /user_sessions/{id} { allow read, write: if isAuthenticated(); }
+    match /ai_config/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /chefinho_questions/{id} { allow read, write: if isAuthenticated(); }
+    match /chefinho_learning/{id} { allow read, write: if isAdmin(); }
+    match /chefinho_history/{id} { allow read, write: if isAuthenticated(); }
+    match /duty_teams/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /residents_registry/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /fixed_teams/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /team_shifts/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /r3_shifts/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+
+    // ===============================================================
+    // Academy Coleções (Explícitas e Seguras)
+    // ===============================================================
+    match /academy_users/{id} { 
+      allow read: if isAuthenticated(); 
+      allow write: if isAdmin() || isOwner(id); 
+    }
+    match /academy_invites/{id} { 
+      allow read: if true; 
+      allow update: if isAuthenticated() || isAdmin();
+      allow create, delete: if isAdmin(); 
+    }
+    match /academy_admin_actions/{id} { allow read, write: if isAdmin(); }
+    match /academy_lives/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /academy_library/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /academy_events/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /academy_announcements/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /academy_observational_requests/{id} { allow read, write: if isAuthenticated(); }
+
+    // Backup de Segurança
+    match /{document=**} {
+      allow read, write: if isAdmin();
+    }
+  }
+}
