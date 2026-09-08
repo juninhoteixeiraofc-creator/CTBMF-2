@@ -15,7 +15,6 @@ import { auth, db } from "../firebase";
 import { mockTurmas } from '../services/mockData';
 import { AppUser } from '../types';
 import Logo from '../components/Logo';
-import DebugAuth from '../components/DebugAuth';
 import {
   UserPlus,
   LogIn,
@@ -24,8 +23,7 @@ import {
   Mail,
   User,
   Lock,
-  AlertCircle,
-  Bug
+  AlertCircle
 } from 'lucide-react';
 
 interface LoginProps {
@@ -36,7 +34,6 @@ const Login: React.FC<LoginProps> = () => {
   const [view, setView] = useState<'initial' | 'login' | 'register'>('initial');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showDebug, setShowDebug] = useState(false);
 
   // Form States
   const [email, setEmail] = useState('');
@@ -391,31 +388,10 @@ const Login: React.FC<LoginProps> = () => {
         {view === 'register' && renderRegister()}
         {view === 'login' && renderLogin()}
 
-        {showDebug && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <div className="relative w-full max-w-md">
-              <button 
-                onClick={() => setShowDebug(false)}
-                className="absolute -top-12 right-0 text-white/50 hover:text-white flex items-center gap-2 text-[10px] uppercase tracking-widest"
-              >
-                Fechar Painel <Bug size={14} />
-              </button>
-              <DebugAuth />
-            </div>
-          </div>
-        )}
-
         <div className="flex flex-col items-center gap-4 pt-8">
           <p className="text-[10px] text-gray-500 text-center uppercase tracking-widest">
             Plataforma Exclusiva • CTBMF 2025
           </p>
-          
-          <button 
-            onClick={() => setShowDebug(true)}
-            className="text-[8px] text-brand-gold/20 hover:text-brand-gold/50 uppercase tracking-tighter transition-colors"
-          >
-            Debug Auth
-          </button>
         </div>
       </div>
     </div>

@@ -183,8 +183,7 @@ const App: React.FC = () => {
         />
         
         <Route path="/instalar" element={<InstallPage />} />
-        <Route path="/inventory-tool" element={<InventoryTool />} />
-        <Route 
+        <Route
           path="/academy-register" 
           element={user ? <Navigate to="/academy" replace /> : <AcademyRegister />} 
         />
@@ -204,6 +203,7 @@ const App: React.FC = () => {
               <>
                 <Route path="/admin" element={<Admin user={user} />} />
                 <Route path="/academy-admin" element={<AdminAcademy user={user} />} />
+                <Route path="/inventory-tool" element={<InventoryTool />} />
               </>
             )}
             

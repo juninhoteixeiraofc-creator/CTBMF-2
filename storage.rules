@@ -1,8 +1,54 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Mesma lista de super admins usada em firestore.rules
+    function isAdminEmail() {
+      return isAuthenticated() && request.auth.token.email in [
+        "juninhoteixeiraofc@gmail.com",
+        "marcomaxilofacial@gmail.com",
+        "janioteixeiracd@gmail.com"
+      ];
+    }
+
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    // Fotos de perfil: qualquer autenticado pode ver, só o dono ou admin envia/troca
+    match /avatars/{uid}/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(uid) || isAdminEmail();
+    }
+
+    // Anexos de Planejamento Cirúrgico: uid no caminho garante que só o dono (ou admin) escreve.
+    // Leitura aberta a qualquer autenticado porque a Biblioteca de Aprovados mostra anexos entre residentes.
+    match /planejamentos/{uid}/{allPaths=**} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(uid) || isAdminEmail();
+    }
+
+    // PDF gerado do Planejamento Cirúrgico: sem uid no caminho (planId apenas), não dá pra checar
+    // dono aqui sem consultar o Firestore (e o app usa 3 bancos Firestore diferentes, ver auditoria).
+    // Mantido como está hoje (qualquer autenticado) até essa checagem poder ser feita com segurança.
+    match /surgical_plans/{planId}/{fileName} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Materiais institucionais (protocolos em PDF etc.): leitura geral, escrita só admin
+    match /protocolos/{allPaths=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAdminEmail();
+    }
+
+    // Qualquer caminho não previsto acima: negado por padrão a quem não é admin
+    // (evita que a ferramenta de inventário ou qualquer código futuro liste o bucket inteiro)
     match /{allPaths=**} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAdminEmail();
     }
   }
 }
